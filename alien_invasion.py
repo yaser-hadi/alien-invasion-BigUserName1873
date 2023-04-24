@@ -1,13 +1,15 @@
 import sys
 import pygame
+import os
 from setting import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
 
 
-
 class AlienInvasion:
+    
+
     def __init__(self):
 
         pygame.init()
@@ -17,7 +19,9 @@ class AlienInvasion:
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
+        #self.shoot_sfx = pygame.mixer.Sound('sniper-rifle-firing.mp3')
         self._create_fleet()
+        
         pygame.display.set_caption('Alien Invasion')
 
 
@@ -104,9 +108,12 @@ class AlienInvasion:
 
 
     def _fire_bullet(self):
-        if len(self.bullets) < self.settings.bullets_allowed: 
+        if len(self.bullets) < self.settings.bullets_allowed:
+
+
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
+            #self.shoot_sfx.play()
 
 
 
