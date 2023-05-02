@@ -34,7 +34,7 @@ class AlienInvasion:
 
 
 
-
+  
     def run_game(self):
         self._update_screen()
 
