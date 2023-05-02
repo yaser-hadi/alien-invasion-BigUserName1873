@@ -1,9 +1,10 @@
 import sys
 import pygame
+import random
 from time import sleep
 from setting import Settings
 from ship import Ship
-from bullet import Bullet
+from bullet import Bullet, Alien_Bullet
 from alien import Alien
 from game_stats import GameStats
 from button import Button
@@ -139,13 +140,17 @@ class AlienInvasion:
 
 
     def _check_bullets_alien_collision(self):
-        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        collisions1 = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        collisions2 = pygame.sprite.groupcollide(self.aliens, self.bullets, True, True)
 
-        if collisions:
+        if collisions1:
             self.stats.score += self.settings.alien_points
             self.sb.prep_score()
             self.scream_sfx.play()
             self.sb.check_high_score()
+
+        if collisions2:
+            self._ship_hit()
 
         if not self.aliens:
             self.bullets.empty()
@@ -157,19 +162,20 @@ class AlienInvasion:
 
 
 
-    def _create_alien(self, alien_number, row_number):
+    def _create_alien(self, alien_number, row_number, can_shoot = False):
         alien = Alien(self)
         alien_width, alien_height = alien.rect.size
         alien.x = alien_width + 2 * alien_width * alien_number
         alien.rect.x = alien.x
         alien.rect.y = alien_height + 2 * alien.rect.height * row_number
+        alien.can_shoot = can_shoot
         self.aliens.add(alien)
 
 
     def _create_fleet(self):
         alien = Alien(self)
         alien_width, alien_height = alien.rect.size
-
+        can_shoot = False
         available_space_x = self.settings.screen_width - (2 * alien_width)
         number_aliens_x = available_space_x // (2 * alien_width)
 
@@ -180,7 +186,9 @@ class AlienInvasion:
 
         for row_number in range(number_rows):
             for alien_number in range(number_aliens_x):
-                self._create_alien(alien_number, row_number)
+                if row_number == number_rows -1:
+                    can_shoot = True
+                self._create_alien(alien_number, row_number, can_shoot)
 
 
     def _check_fleet_edges(self):

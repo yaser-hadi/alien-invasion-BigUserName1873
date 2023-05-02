@@ -1,5 +1,3 @@
-
-
 class Settings:
     def __init__(self):
         self.screen_width = 1200
@@ -21,6 +19,7 @@ class Settings:
 
         self.score_scale = 1.5
 
+
         self.initialize_dynamic_settings()
 
 
@@ -34,8 +33,10 @@ class Settings:
 
 
     def initialize_dynamic_settings(self):
-            self.ship_speed = 0.5
+            self.ship_speed = 1
             self.bullet_speed = 1.5
+            self.alien_bullet_speed = -1.5
+            self.alien_bullet_delay = 1
             self.alien_speed = 0.5
             self.fleet_direction = 1
             self.alien_points = 50
