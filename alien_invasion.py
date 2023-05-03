@@ -11,6 +11,7 @@ from button import Button
 from scoreboard import Scoreboard
 
 
+
 class AlienInvasion:
     
 
@@ -22,6 +23,7 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.alien_bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self.shoot_sfx = pygame.mixer.Sound('shot.mp3')
         self.scream_sfx = pygame.mixer.Sound('scream.mp3')
@@ -46,6 +48,9 @@ class AlienInvasion:
                 self._update_bullets()
                 self._update_aliens()
                 self._update_screen()
+                '''r = random.randint(0,100)
+                if r == 0 :
+                    self._fire_bullet()'''
 
 
     def _update_screen(self):
@@ -220,6 +225,18 @@ class AlienInvasion:
             self._ship_hit()
 
         self._check_aliens_bottom()
+
+
+    def _alien_shoot(self):
+            new_bullet = Alien_Bullet(self)
+            self.alien_bullets.add(new_bullet)
+
+
+    def _update_bullets(self):
+            self.alien_bullets.update()
+            for bullet in self.bullets.copy():
+                if bullet.rect.bottom <= 0:
+                    self.bullets.remove(bullet)
 
 
 
