@@ -32,4 +32,4 @@ class Alien(Sprite):
         self.rect.x = self.x
 
     def alien_shoot(self):
-        
+        self.alien
