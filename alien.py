@@ -1,6 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
-from bullet import Alien_Bullet
+
 
 
 class Alien(Sprite):
@@ -8,7 +8,7 @@ class Alien(Sprite):
         super().__init__()
         self.screen = ai_game.screen
 
-        self.image = pygame.image.load('images/alien_ship.png')
+        self.image = pygame.image.load('images/alien.bmp')
         self.rect = self.image.get_rect()
 
         self.rect.x = self.rect.width

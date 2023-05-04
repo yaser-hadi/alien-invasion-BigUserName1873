@@ -47,16 +47,22 @@ class AlienInvasion:
                 self.ship.update()
                 self._update_bullets()
                 self._update_aliens()
-                self._update_screen()
-                '''r = random.randint(0,100)
+                
+                r = random.randint(0,100)
                 if r == 0 :
-                    self._fire_bullet()'''
+                    for alien in self.aliens:
+                        self._alien_shoot(alien)
+
+                self._update_screen()
+                    
 
 
     def _update_screen(self):
             self.screen.fill(self.settings.bg_color)
             self.ship.blitme()
             for bullet in self.bullets.sprites():
+                bullet.draw_bullet()
+            for bullet in self.alien_bullets.sprites():
                 bullet.draw_bullet()
             self.aliens.draw(self.screen)
 
@@ -118,6 +124,11 @@ class AlienInvasion:
             for bullet in self.bullets.copy():
                 if bullet.rect.bottom <= 0:
                     self.bullets.remove(bullet)
+
+            self.alien_bullets.update()
+            for bullet in self.alien_bullets.copy():
+                if bullet.rect.bottom >= self.settings.screen_height:
+                    self.alien_bullets.remove(bullet)
             
             self._check_bullets_alien_collision()
 
@@ -173,6 +184,9 @@ class AlienInvasion:
         alien.rect.x = alien.x
         alien.rect.y = alien_height + 2 * alien.rect.height * row_number
         alien.can_shoot = can_shoot
+        r = random.randint(0, 60)
+        if r == 59:
+            alien.can_shoot = True
         self.aliens.add(alien)
 
 
@@ -226,18 +240,10 @@ class AlienInvasion:
         self._check_aliens_bottom()
 
 
-    def _alien_shoot(self):
-            new_bullet = Alien_Bullet(self)
+    def _alien_shoot(self, alien):
+            new_bullet = Alien_Bullet(self, alien)
             self.alien_bullets.add(new_bullet)
-
-
-    def _alien_update_bullets(self):
-            self.alien_bullets.update()
-            for bullet in self.bullets.copy():
-                if bullet.rect.bottom <= 0:
-                    self.bullets.remove(bullet)
-
-
+                    
 
 
     def _check_play_button(self, mouse_pos):
