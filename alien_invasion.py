@@ -108,7 +108,6 @@ class AlienInvasion:
     def _fire_bullet(self):
         if len(self.bullets) < self.settings.bullets_allowed:
 
-
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
             self.shoot_sfx.play()
@@ -232,7 +231,7 @@ class AlienInvasion:
             self.alien_bullets.add(new_bullet)
 
 
-    def _update_bullets(self):
+    def _alien_update_bullets(self):
             self.alien_bullets.update()
             for bullet in self.bullets.copy():
                 if bullet.rect.bottom <= 0:
