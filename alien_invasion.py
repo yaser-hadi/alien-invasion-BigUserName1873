@@ -1,84 +1,84 @@
-import sys
-import pygame
-import random
-from time import sleep
-from setting import Settings
-from ship import Ship
-from bullet import Bullet, Alien_Bullet
-from alien import Alien
-from game_stats import GameStats
-from button import Button
-from scoreboard import Scoreboard
-
-
-
-class AlienInvasion:
-    
-
-    def __init__(self):
-
-        pygame.init()
-        pygame.mixer.init()
-        self.settings = Settings()
-        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
-        self.ship = Ship(self)
-        self.bullets = pygame.sprite.Group()
-        self.alien_bullets = pygame.sprite.Group()
-        self.aliens = pygame.sprite.Group()
-        self.shoot_sfx = pygame.mixer.Sound('shot.mp3')
-        self.scream_sfx = pygame.mixer.Sound('scream.mp3')
-        self._create_fleet()
-        self.stats = GameStats(self)
-        self.play_button = Button(self, "Play")
-        self.sb = Scoreboard(self)
-        
-        pygame.display.set_caption('Alien Invasion')
-
-
-
-
-  
-    def run_game(self):
-        self._update_screen()
-
-        while True:
-            self._check_events()
-            if self.stats.game_active:
-                self.ship.update()
-                self._update_bullets()
-                self._update_aliens()
-                
-                r = random.randint(0,100)
-                if r == 0 :
-                    for alien in self.aliens:
-                        self._alien_shoot(alien)
-
-                self._update_screen()
-                    
-
-
-    def _update_screen(self):
-            self.screen.fill(self.settings.bg_color)
-            self.ship.blitme()
-            for bullet in self.bullets.sprites():
-                bullet.draw_bullet()
-            for bullet in self.alien_bullets.sprites():
-                bullet.draw_bullet()
-            self.aliens.draw(self.screen)
-
-            if not self.stats.game_active:
-                self.play_button.draw_button()
-
-            self.sb.show_score()
-
-            pygame.display.flip()
-
-
-    def _check_events(self):
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
-
+import sys   
+import pygame   
+import random   
+from time import sleep   
+from setting import Settings   
+from ship import Ship   
+from bullet import Bullet, Alien_Bullet   
+from alien import Alien   
+from game_stats import GameStats   
+from button import Button   
+from scoreboard import Scoreboard   
+   
+   
+   
+class AlienInvasion:   
+       
+   
+    def __init__(self):   
+   
+        pygame.init()   
+        pygame.mixer.init()   
+        self.settings = Settings()   
+        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))   
+        self.ship = Ship(self)   
+        self.bullets = pygame.sprite.Group()   
+        self.alien_bullets = pygame.sprite.Group()   
+        self.aliens = pygame.sprite.Group()   
+        self.shoot_sfx = pygame.mixer.Sound('shot.mp3')   
+        self.scream_sfx = pygame.mixer.Sound('scream.mp3')   
+        self._create_fleet()   
+        self.stats = GameStats(self)   
+        self.play_button = Button(self, "Play")   
+        self.sb = Scoreboard(self)   
+           
+        pygame.display.set_caption('Alien Invasion')   
+   
+   
+   
+   
+     
+    def run_game(self):   
+        self._update_screen()   
+   
+        while True:   
+            self._check_events()   
+            if self.stats.game_active:   
+                self.ship.update()   
+                self._update_bullets()   
+                self._update_aliens()   
+                   
+                r = random.randint(0,1000)   
+                if r == 0 :   
+                    for alien in self.aliens:   
+                        self._alien_shoot(alien)   
+   
+                self._update_screen()   
+                       
+   
+   
+    def _update_screen(self):   
+            self.screen.fill(self.settings.bg_color)   
+            self.ship.blitme()   
+            for bullet in self.bullets.sprites():   
+                bullet.draw_bullet()   
+            for bullet in self.alien_bullets.sprites():   
+                bullet.draw_bullet()   
+            self.aliens.draw(self.screen)   
+   
+            if not self.stats.game_active:   
+                self.play_button.draw_button()   
+   
+            self.sb.show_score()   
+   
+            pygame.display.flip()   
+   
+   
+    def _check_events(self):   
+            for event in pygame.event.get():   
+                if event.type == pygame.QUIT:   
+                    sys.exit()   
+   
                 elif event.type == pygame.KEYDOWN:
                     self._check_keydown_events(event)
 
@@ -238,11 +238,12 @@ class AlienInvasion:
             self._ship_hit()
 
         self._check_aliens_bottom()
-
+  
 
     def _alien_shoot(self, alien):
-            new_bullet = Alien_Bullet(self, alien)
-            self.alien_bullets.add(new_bullet)
+            if self.aliens.can_shoot:
+                new_bullet = Alien_Bullet(self, alien)
+                self.alien_bullets.add(new_bullet)
                     
 
 
